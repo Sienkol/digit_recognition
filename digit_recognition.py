@@ -3,14 +3,40 @@ import struct
 from array import array
 from os.path import join
 import matplotlib.pyplot as plt
+import tensorflow as tf
 from tensorflow.keras.datasets import mnist
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import Flatten
 
+TF_ENABLE_ONEDNN_OPTS = 0
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 
-indexes = np.random.randint(0, len(x_test), 10)
-print(indexes)
-fig, axes = plt.subplots(1, 10, figsize=(25, 25))
-for i, index in enumerate(indexes):
-    axes[i].imshow(x_test[index], cmap="gray")
-    axes[i].set_title(f"Cyfra: {y_test[index]}")
-plt.show()
+# Tworzenie modelu sekwencyjnego
+model = Sequential()
+
+# Dodawanie warstwy wejściowej z 784 neuronami (rozmiar obrazu 28x28 pikseli)
+model.add(Dense(units=784, activation="relu", input_shape=(28, 28)))
+
+# Dodawanie dwóch warstw ukrytych po 16 neuronów każda
+model.add(Dense(units=16, activation="relu"))
+model.add(Flatten())
+model.add(Dense(units=16, activation="relu"))
+
+# Dodawanie warstwy wyjściowej z 10 neuronami (odpowiadającymi cyfrom od 0 do 9)
+model.add(Dense(units=10, activation="softmax"))
+
+# Kompilowanie modelu
+model.compile(
+    optimizer="sgd",
+    loss="sparse_categorical_crossentropy",
+    metrics=["accuracy"],
+)
+
+# Dopasowanie modelu do danych
+model.fit(x_train, y_train, epochs=10, batch_size=32, validation_split=0.2)
+
+# Ewaluacja modelu
+model.evaluate(x_test, y_test)
+weights = model.get_weights()
+print(weights)
