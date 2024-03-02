@@ -9,10 +9,8 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import Flatten
 
-TF_ENABLE_ONEDNN_OPTS = 0
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 
-# Tworzenie modelu sekwencyjnego
 model = Sequential()
 
 # Dodawanie warstwy wejściowej z 784 neuronami (rozmiar obrazu 28x28 pikseli)
@@ -34,11 +32,22 @@ model.compile(
     metrics=["accuracy"],
 )
 
-# Dopasowanie modelu do danych
-model.fit(x_train, y_train, epochs=10, batch_size=32, validation_split=0.2)
+index = np.random.randint(0, len(x_test))
+x_sample = x_test[index]
 
-# Ewaluacja modelu
-model.evaluate(x_test, y_test)
+predictions = []
 
-# Zapisywanie wag do pliku
-model.save_weights("model_weights.h5")
+for _ in range(10):
+    # Przewidzenie dla próbki
+    prediction = model.predict(x_sample.reshape(1, 28, 28))
+    # Dodanie predykcji do listy
+    predictions.append(np.argmax(prediction))
+
+# Wyświetlenie predykcji
+print(f"Predykcje: {predictions}")
+print(y_test[index])
+
+fig, axes = plt.subplots(1, 1, figsize=(10, 10))
+axes.imshow(x_test[index], cmap="gray")
+axes.set_title(f"Cyfra: {y_test[index]}")
+plt.show()
