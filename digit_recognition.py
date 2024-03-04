@@ -42,3 +42,5 @@ model.evaluate(x_test, y_test)
 
 # Zapisywanie wag do pliku
 model.save_weights("model_weights.h5")
+
+model.save("model.h5")
