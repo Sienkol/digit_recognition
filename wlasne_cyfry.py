@@ -10,7 +10,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import Flatten
 
-model = tf.keras.models.load_model("model.h5")
+model = tf.keras.models.load_model("model2.h5")
 
 img_number = 0
 while os.path.isfile(f"cyfry/{img_number}.png"):

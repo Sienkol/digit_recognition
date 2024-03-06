@@ -9,7 +9,6 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import Flatten
 
-TF_ENABLE_ONEDNN_OPTS = 0
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 
 # Tworzenie modelu sekwencyjnego
